@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Bangka System - River Taxi Management</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- LOGIN PAGE -->
+    <div id="loginPage" class="login-page">
+        <div class="login-container">
+            <div class="login-header">
+                <span class="login-icon">⛵</span>
+                <h1>E-Bangka System</h1>
+                <p>River Taxi Management Platform</p>
+            </div>
+
+            <div class="login-content">
+                <!-- LOGIN FORM -->
+                <div id="loginFormContainer">
+                    <h2>Welcome Back</h2>
+                    <p class="login-subtitle">Select your role to continue</p>
+
+                    <form class="login-form" id="loginForm">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" class="form-input" placeholder="Enter your username"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" class="form-input" placeholder="Enter your password"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="role">User Role</label>
+                            <select id="role" class="form-input" required>
+                                <option value="">Select your role</option>
+                                <option value="customer">🚶 Customer (Passenger)</option>
+                                <option value="driver">🚤 Driver (Boat Operator)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="login-button">Login to E-Bangka</button>
+                    </form>
+
+                    <div class="demo-info">
+                        <h3>Demo Credentials</h3>
+                        <p><strong>Username:</strong> demo | <strong>Password:</strong> demo</p>
+                        <p style="font-size: 0.9rem; color: #666;">Try each role to see different features!</p>
+                    </div>
+
+                    <div class="signup-toggle">
+                        <p>Don't have an account? <button type="button" class="link-button"
+                                onclick="toggleSignupForm()">Sign up here</button></p>
+                    </div>
+                </div>
+
+                <!-- SIGNUP FORM -->
+                <div id="signupFormContainer" style="display: none;">
+                    <h2>Create Account</h2>
+                    <p class="login-subtitle">Join E-Bangka today</p>
+
+                    <form class="login-form" id="signupForm">
+                        <div class="form-group">
+                            <label for="signupFullName">Full Name</label>
+                            <input type="text" id="signupFullName" class="form-input" placeholder="Enter your full name"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signupEmail">Email Address</label>
+                            <input type="email" id="signupEmail" class="form-input" placeholder="Enter your email"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signupUsername">Username</label>
+                            <input type="text" id="signupUsername" class="form-input" placeholder="Choose a username"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signupPassword">Password</label>
+                            <input type="password" id="signupPassword" class="form-input"
+                                placeholder="Create a password" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signupConfirmPassword">Confirm Password</label>
+                            <input type="password" id="signupConfirmPassword" class="form-input"
+                                placeholder="Confirm your password" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signupRole">User Role</label>
+                            <select id="signupRole" class="form-input" required>
+                                <option value="">Select your role</option>
+                                <option value="customer">🚶 Customer (Passenger)</option>
+                                <option value="driver">🚤 Driver (Boat Operator)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="login-button">Create Account</button>
+                    </form>
+
+                    <div class="signup-toggle">
+                        <p>Already have an account? <button type="button" class="link-button"
+                                onclick="toggleSignupForm()">Login here</button></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APPLICATION (Hidden until login) -->
+    <div id="mainApp" style="display: none;">
+
+        <!-- Header/Navigation -->
+        <header class="header">
+            <div class="header-container">
+                <div class="logo">
+                    <span class="logo-icon">⛵</span>
+                    <div class="logo-text">
+                        <h1>E-Bangka</h1>
+                    </div>
+                </div>
+
+                <nav class="nav-menu" id="navMenu">
+                    <!-- Navigation links will be populated by JavaScript based on role -->
+                </nav>
+
+                <div class="user-controls">
+                    <div class="user-info">
+                        <span class="user-name" id="userName"></span>
+                        <span class="user-role" id="userRole"></span>
+                    </div>
+                    <button class="logout-button" onclick="logout()">Logout</button>
+                </div>
+
+                <button class="menu-toggle" id="menuToggle">☰</button>
+            </div>
+        </header>
+        <br>
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <h3 class="hero-title">Welcome to <br>E-Bangka</h3>
+                <p class="hero-subtitle">Modern river taxi management made simple and efficient</p>
+                <button class="cta-button" onclick="scrollToSection('booking')">Start Booking</button>
+            </div>
+            <div class="hero-graphic">
+                <div class="boat-animation">🚤</div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <main class="main-container">
+
+            <!-- Booking Section -->
+            <section class="section booking-section" id="booking">
+                <h2 class="section-title">Quick Booking</h2>
+                <div class="booking-container">
+                    <form class="booking-form" id="bookingForm">
+                        <div class="form-group">
+                            <label for="departure">Departure Point</label>
+                            <select id="departure" class="form-input" required>
+                                <option value="">Select departure location</option>
+                                <option value="barangay-1">Barangay 1 - North Dock</option>
+                                <option value="barangay-2">Barangay 2 - Central Pier</option>
+                                <option value="barangay-3">Barangay 3 - East Terminal</option>
+                                <option value="barangay-4">Barangay 4 - South Basin</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="destination">Destination</label>
+                            <select id="destination" class="form-input" required>
+                                <option value="">Select destination</option>
+                                <option value="barangay-1">Barangay 1 - North Dock</option>
+                                <option value="barangay-2">Barangay 2 - Central Pier</option>
+                                <option value="barangay-3">Barangay 3 - East Terminal</option>
+                                <option value="barangay-4">Barangay 4 - South Basin</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date">Travel Date</label>
+                            <input type="date" id="date" class="form-input" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="time">Preferred Time</label>
+                            <input type="time" id="time" class="form-input" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="passengers">Number of Passengers</label>
+                            <input type="number" id="passengers" class="form-input" min="1" max="20" value="1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="boatType">Boat Type</label>
+                            <select id="boatType" class="form-input" required>
+                                <option value="">Select boat type</option>
+                                <option value="standard">Standard (6 pax) - ₱150/pax</option>
+                                <option value="deluxe">Deluxe (10 pax) - ₱180/pax</option>
+                                <option value="express">Express (4 pax) - ₱250/pax</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" class="form-input" placeholder="Full name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Contact Number</label>
+                            <input type="tel" id="phone" class="form-input" placeholder="Mobile number" required>
+                        </div>
+
+                        <button type="submit" class="submit-button">Search Available Boats</button>
+                    </form>
+
+                    <!-- Results Container -->
+                    <div class="results-container" id="resultsContainer" style="display: none;">
+                        <h3>Available Boats</h3>
+                        <div class="boats-list" id="boatsList"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DRIVER SECTION: Assigned Trips -->
+            <section class="section driver-section" id="driverTrips" style="display: none;">
+                <h2 class="section-title">🚤 Your Assigned Trips</h2>
+                <div class="driver-controls">
+                    <button class="driver-btn" onclick="loadAssignedTrips()">Refresh Trips</button>
+                    <button class="driver-btn" onclick="updateBoatStatus()">Update Boat Status</button>
+                </div>
+                <div class="trips-list" id="tripsList"></div>
+            </section>
+
+            <!-- DRIVER SECTION: Passenger Tracking -->
+            <section class="section driver-section" id="passengerTracking" style="display: none;">
+                <h2 class="section-title">👥 Passenger Tracking</h2>
+                <div class="passenger-tracking-container" id="passengerTrackingContainer"></div>
+            </section>
+
+            <!-- DRIVER SECTION: Boat Status Updates -->
+            <section class="section driver-section" id="boatStatusSection" style="display: none;">
+                <h2 class="section-title">⛵ Current Boat Status</h2>
+                <div class="boat-status-form">
+                    <div class="status-option">
+                        <input type="radio" id="available" name="boatStatus" value="available" checked>
+                        <label for="available">✓ Available</label>
+                    </div>
+                    <div class="status-option">
+                        <input type="radio" id="inTransit" name="boatStatus" value="inTransit">
+                        <label for="inTransit">→ In Transit</label>
+                    </div>
+                    <div class="status-option">
+                        <input type="radio" id="maintenance" name="boatStatus" value="maintenance">
+                        <label for="maintenance">🔧 Under Maintenance</label>
+                    </div>
+                    <textarea placeholder="Add a note (optional)..." class="status-note" id="statusNote"></textarea>
+                    <button class="submit-button" onclick="submitBoatStatus()">Update Status</button>
+                </div>
+            </section>
+
+            <!-- ADMIN SECTION: Boat Management -->
+            <section class="section admin-section" id="boatManagement" style="display: none;">
+                <h2 class="section-title">🚤 Boat Management</h2>
+                <div class="admin-controls">
+                    <button class="admin-btn" onclick="showBoatForm()">+ Add New Boat</button>
+                    <button class="admin-btn" onclick="loadBoatsList()">View All Boats</button>
+                </div>
+                <div id="boatsManagementContainer"></div>
+            </section>
+
+            <!-- ADMIN SECTION: Route Management -->
+            <section class="section admin-section" id="routeManagement" style="display: none;">
+                <h2 class="section-title">📍 Route Management</h2>
+                <div class="admin-controls">
+                    <button class="admin-btn" onclick="showRouteForm()">+ Add New Route</button>
+                    <button class="admin-btn" onclick="loadRoutesList()">View All Routes</button>
+                </div>
+                <div id="routesManagementContainer"></div>
+            </section>
+
+            <!-- ADMIN SECTION: Trip Assignment -->
+            <section class="section admin-section" id="tripAssignment" style="display: none;">
+                <h2 class="section-title">📋 Trip Assignment</h2>
+                <div class="assignment-form">
+                    <h3>Assign Driver to Trip</h3>
+                    <div class="form-group">
+                        <label for="tripSelect">Select Trip</label>
+                        <select id="tripSelect" class="form-input">
+                            <option value="">Choose a trip</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="driverSelect">Assign Driver</label>
+                        <select id="driverSelect" class="form-input">
+                            <option value="">Choose a driver</option>
+                        </select>
+                    </div>
+                    <button class="submit-button" onclick="assignTrip()">Assign Trip</button>
+                </div>
+                <div id="assignmentListContainer"></div>
+            </section>
+
+            <!-- ADMIN SECTION: Reports & Analytics -->
+            <section class="section admin-section" id="adminReports" style="display: none;">
+                <h2 class="section-title">📊 Reports & Analytics</h2>
+                <div class="admin-controls">
+                    <button class="admin-btn" onclick="generateFleetReport()">Fleet Report</button>
+                    <button class="admin-btn" onclick="generateRevenueReport()">Revenue Report</button>
+                    <button class="admin-btn" onclick="generateTripReport()">Trip Statistics</button>
+                    <button class="admin-btn" onclick="generateDriverPerformance()">Driver Performance</button>
+                </div>
+                <div id="reportsContainer"></div>
+            </section>
+
+            <!-- ADMIN SECTION: User Management -->
+            <section class="section admin-section" id="userManagement" style="display: none;">
+                <h2 class="section-title">👤 User Management</h2>
+                <div class="admin-controls">
+                    <button class="admin-btn" onclick="showUserForm()">+ Create New User</button>
+                    <button class="admin-btn" onclick="loadUsersList()">View All Users</button>
+                    <button class="admin-btn" onclick="loadPendingDriverApprovals()">⏳ Pending Driver Approvals</button>
+                </div>
+                <div id="usersManagementContainer"></div>
+            </section>
+
+            <!-- ADMIN SECTION: Driver Approvals -->
+            <section class="section admin-section" id="driverApprovalsSection" style="display: none;">
+                <h2 class="section-title">⏳ Pending Driver Applications</h2>
+                <div id="driverApprovalsContainer"></div>
+            </section>
+
+            <!-- Routes Section (All Roles) -->
+            <section class="section routes-section" id="routes" style="display: none;">
+                <h2 class="section-title">Popular Routes</h2>
+                <div class="routes-grid">
+                    <div class="route-card">
+                        <div class="route-icon">🌊</div>
+                        <h3>North Route</h3>
+                        <p class="route-distance">Distance: 5.2 km</p>
+                        <p class="route-time">Duration: 12 mins</p>
+                        <p class="route-fare">Fare: ₱150 - ₱250</p>
+                        <button class="route-button" onclick="selectRoute('north')">Select Route</button>
+                    </div>
+
+                    <div class="route-card">
+                        <div class="route-icon">🏝️</div>
+                        <h3>Central Route</h3>
+                        <p class="route-distance">Distance: 3.8 km</p>
+                        <p class="route-time">Duration: 9 mins</p>
+                        <p class="route-fare">Fare: ₱120 - ₱200</p>
+                        <button class="route-button" onclick="selectRoute('central')">Select Route</button>
+                    </div>
+
+                    <div class="route-card">
+                        <div class="route-icon">🚢</div>
+                        <h3>East Route</h3>
+                        <p class="route-distance">Distance: 6.1 km</p>
+                        <p class="route-time">Duration: 14 mins</p>
+                        <p class="route-fare">Fare: ₱180 - ₱280</p>
+                        <button class="route-button" onclick="selectRoute('east')">Select Route</button>
+                    </div>
+
+                    <div class="route-card">
+                        <div class="route-icon">⚓</div>
+                        <h3>South Route</h3>
+                        <p class="route-distance">Distance: 4.5 km</p>
+                        <p class="route-time">Duration: 11 mins</p>
+                        <p class="route-fare">Fare: ₱140 - ₱220</p>
+                        <button class="route-button" onclick="selectRoute('south')">Select Route</button>
+                    </div>
+                </div>
+            </section>
+
+            </section>
+
+            <!-- Stats Section -->
+            <section class="section stats-section">
+                <h2 class="section-title">System Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 class="stat-number" id="statFleet">24</h3>
+                        <p class="stat-label">Active Boats</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 class="stat-number" id="statPassengers">1,247</h3>
+                        <p class="stat-label">Monthly Passengers</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 class="stat-number" id="statRoutes">4</h3>
+                        <p class="stat-label">Operating Routes</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 class="stat-number" id="statRevenue">₱125K</h3>
+                        <p class="stat-label">Monthly Revenue</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Help/FAQ Section -->
+            <section class="section faq-section" id="help">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <button class="faq-question">How do I book a boat?</button>
+                        <div class="faq-answer">
+                            <p>Simply fill out the booking form above with your departure point, destination, preferred
+                                date and time, and number of passengers. Click "Search Available Boats" to see available
+                                options and confirm your booking.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">What payment methods are accepted?</button>
+                        <div class="faq-answer">
+                            <p>We accept cash payments and digital payments through GCash, PayMaya, and bank transfers.
+                                Payment is collected at the departure dock.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">Can I cancel or reschedule my booking?</button>
+                        <div class="faq-answer">
+                            <p>Yes, you can cancel up to 30 minutes before your scheduled departure with a full refund,
+                                or reschedule for a small fee. Contact our support team for assistance.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">What is your safety protocol?</button>
+                        <div class="faq-answer">
+                            <p>All boats are regularly inspected, equipped with life jackets, and operated by trained
+                                captains. We follow strict safety regulations set by maritime authorities.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Driver FAQ (visible to drivers only) -->
+            <section class="section driver-section" id="driverHelp" style="display: none;">
+                <h2 class="section-title">Driver FAQ</h2>
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <button class="faq-question">How do I accept an assigned trip?</button>
+                        <div class="faq-answer">
+                            <p>Open your "My Trips" dashboard, review the trip details, and click "Accept" on the trip
+                                card. The rider will be notified and the trip will be marked as assigned to you.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">How do I report a delay or issue during a trip?</button>
+                        <div class="faq-answer">
+                            <p>Use the "Report Issue" button within the active trip card. Provide a short description
+                                and any photos if needed. Our operations team will receive the report and respond
+                                accordingly.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">What are the safety checks before departure?</button>
+                        <div class="faq-answer">
+                            <p>Ensure life jackets are available, check fuel and engine status, confirm passenger count,
+                                and verify weather conditions. Mark the pre-departure checklist as complete before
+                                leaving the dock.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">How are driver payments and reconciliations handled?</button>
+                        <div class="faq-answer">
+                            <p>Driver earnings are calculated per completed trip and reconciled weekly. For payment
+                                disputes, contact support with trip details and we will investigate.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Signup Section -->
+            <section class="section signup-section" id="signup">
+                <h2 class="section-title">Join Our Community</h2>
+                <div class="signup-container">
+                    <div class="signup-info">
+                        <h3>Why Join E-Bangka?</h3>
+                        <ul>
+                            <li>✓ Easy and convenient booking</li>
+                            <li>✓ Real-time trip tracking</li>
+                            <li>✓ Secure payment options</li>
+                            <li>✓ 24/7 customer support</li>
+                            <li>✓ Exclusive member rewards</li>
+                        </ul>
+                    </div>
+
+                    <form class="signup-form" id="mainAppSignupForm">
+                        <div class="form-group">
+                            <label for="mainSignupFullName">Full Name</label>
+                            <input type="text" id="mainSignupFullName" class="form-input"
+                                placeholder="Enter your full name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mainSignupEmail">Email Address</label>
+                            <input type="email" id="mainSignupEmail" class="form-input" placeholder="Enter your email"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mainSignupPhone">Phone Number</label>
+                            <input type="tel" id="mainSignupPhone" class="form-input"
+                                placeholder="Enter your phone number" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mainSignupUsername">Username</label>
+                            <input type="text" id="mainSignupUsername" class="form-input"
+                                placeholder="Choose a username" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mainSignupPassword">Password</label>
+                            <input type="password" id="mainSignupPassword" class="form-input"
+                                placeholder="Create a password" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mainSignupConfirmPassword">Confirm Password</label>
+                            <input type="password" id="mainSignupConfirmPassword" class="form-input"
+                                placeholder="Confirm your password" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mainSignupRole">User Role</label>
+                            <select id="mainSignupRole" class="form-input" required>
+                                <option value="">Select your role</option>
+                                <option value="customer">🚶 Customer (Passenger)</option>
+                                <option value="driver">🚤 Driver (Boat Operator)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group checkbox">
+                            <input type="checkbox" id="mainSignupTerms" required>
+                            <label for="mainSignupTerms">I agree to the Terms of Service and Privacy Policy</label>
+                        </div>
+
+                        <button type="submit" class="login-button">Create My Account</button>
+                    </form>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>E-Bangka</h4>
+                    <p>Modern river taxi management system</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#booking">Book Now</a></li>
+                        <li><a href="#routes">Routes</a></li>
+                        <li><a href="#help">Help</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Email: support@ebangka.com</p>
+                    <p>Phone: +63 (0) 123 456 7890</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-icon">f</a>
+                        <a href="#" class="social-icon">t</a>
+                        <a href="#" class="social-icon">ig</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 E-Bangka System. All rights reserved.</p>
+            </div>
+        </footer>
+
+    </div> <!-- Close mainApp div -->
+
+    <script src="script.js"></script>
+</body>
+
+</html>
